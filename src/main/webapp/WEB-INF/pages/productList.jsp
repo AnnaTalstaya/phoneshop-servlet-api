@@ -1,45 +1,44 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <jsp:useBean id="products" type="java.util.ArrayList" scope="request"/>
-<html>
-  <head>
-    <title>Product List</title>
-    <link href='http://fonts.googleapis.com/css?family=Lobster+Two' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/styles/main.css">
-  </head>
-  <body class="product-list">
-    <header>
-      <a href="${pageContext.servletContext.contextPath}">
-        <img src="${pageContext.servletContext.contextPath}/images/logo.svg"/>
-        PhoneShop
-      </a>
-    </header>
-    <main>
-      <p>
-        Welcome to Expert-Soft training!
-      </p>
-      <table>
+<tags:master pageStyleClass="product-list">
+    <br>
+    <form>
+        <input type="hidden" name="sort" value="${param.sort}"> <%--Now after searching sorting doesn't disappear --%>
+        <input type="hidden" name="order" value="${param.order}">
+        <input type = "search" name = "query" value="${param.query}">
+        <button type = "submit">Search</button>
+    </form>
+
+    <table>
         <thead>
-          <tr>
+        <tr>
             <td>Image</td>
-            <td>Description</td>
-            <td class="price">Price</td>
-          </tr>
+            <td>Description
+                <tags:sortLink sort="description" order="asc" query="${param.query}" contentOftags="asc"/>
+                <tags:sortLink sort="description" order="desc" query="${param.query}" contentOftags="desc"/>
+            </td>
+            <td class="price">Price
+                <tags:sortLink sort="price" order="asc" query="${param.query}" contentOftags="asc"/>
+                <tags:sortLink sort="price" order="desc" query="${param.query}" contentOftags="desc"/>
+            </td>
+        </tr>
         </thead>
         <c:forEach var="product" items="${products}">
-          <tr>
-            <td>
-              <img class="product-tile" src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
-            </td>
-            <td>${product.description}</td>
-            <td class="price">
-              <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
-            </td>
-          </tr>
+            <tr>
+                <td>
+                    <img class="product-title" src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
+                </td>
+                <td>
+                    <a href="${pageContext.servletContext.contextPath}/products/${product.id}">${product.description}</a>
+                </td>
+                <td class="price">
+                    <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+                </td>
+            </tr>
         </c:forEach>
-      </table>
-    </main>
-  </body>
-</html>
+    </table>
+</tags:master>
