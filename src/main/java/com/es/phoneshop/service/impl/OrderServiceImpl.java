@@ -2,6 +2,7 @@ package com.es.phoneshop.service.impl;
 
 import com.es.phoneshop.model.cart.Cart;
 import com.es.phoneshop.model.order.ArrayListOrderDao;
+import com.es.phoneshop.model.order.Delivery;
 import com.es.phoneshop.model.order.Order;
 import com.es.phoneshop.service.OrderService;
 
@@ -21,12 +22,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order placeOrder(Cart cart, String name, String deliveryAddress, String phone) {
+    public Order placeOrder(Cart cart, String name, String deliveryAddress, String phone, Delivery delivery) {
 
         Order order = new Order();
         order.setName(name);
         order.setDeliveryAddress(deliveryAddress);
         order.setPhone(phone);
+        order.setDelivery(delivery);
         order.getCartItems().addAll(cart.getCartItems());
         ArrayListOrderDao.getInstance().save(order);
 
