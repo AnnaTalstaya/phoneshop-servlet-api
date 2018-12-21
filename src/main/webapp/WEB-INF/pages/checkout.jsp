@@ -13,6 +13,7 @@
 <tags:master pageTitle="Cart">
     <jsp:useBean id="cart" type="com.es.phoneshop.model.cart.Cart" scope="request"/>
 
+
     <form method="post" action="${pageContext.servletContext.contextPath}/checkout">
 
         <c:if test="${not empty cart.cartItems}">
@@ -68,6 +69,15 @@
         <br><br>
         <input name = "phone" placeholder="phone">
         <br><br>
+
+        <select name="delivery">
+            <c:forEach var="delivery" items="${deliveries}">
+                <option value="${delivery.type}>${delivery.type}-${delivery.costOfDelivery}</option>
+            </c:forEach>
+        </select>
+
+        <br><br>
+
         <c:if test="${not empty cart.cartItems}">
             <button>Place order</button>
         </c:if>

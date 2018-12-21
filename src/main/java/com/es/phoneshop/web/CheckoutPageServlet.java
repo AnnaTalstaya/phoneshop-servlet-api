@@ -1,6 +1,7 @@
 package com.es.phoneshop.web;
 
 import com.es.phoneshop.model.cart.Cart;
+import com.es.phoneshop.model.order.Delivery;
 import com.es.phoneshop.model.order.Order;
 import com.es.phoneshop.service.CartService;
 import com.es.phoneshop.service.OrderService;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 public class CheckoutPageServlet extends HttpServlet {
 
@@ -37,8 +39,13 @@ public class CheckoutPageServlet extends HttpServlet {
         String name = request.getParameter("name");
         String deliveryAddress = request.getParameter("deliveryAddress");
         String phone = request.getParameter("phone");
+        String typeOfDelivery = request.getParameter("typeOfDelivery");
+        String costOfDelivery = request.getParameter("costOfDelivery");
+        Delivery delivery = new Delivery(typeOfDelivery, new BigDecimal(costOfDelivery));
 
-        Order order = orderService.placeOrder(cart, name, deliveryAddress, phone);
+        request.setAttribute("delivery", delivery);
+
+        Order order = orderService.placeOrder(cart, name, deliveryAddress, phone, delivery);
         cartService.clearCart(cart);
         response.sendRedirect(request.getContextPath() + "/orderOverview/" + order.getId());
     }
